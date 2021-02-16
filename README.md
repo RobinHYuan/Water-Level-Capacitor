@@ -9,4 +9,4 @@ NEW LCD PIN Assignment:\
   LCD_D4 equ P1.4\
   LCD_D5 equ P1.3\
   LCD_D6 equ P1.2\
-  LCD_D7 equ P1.1\
+  LCD_D7 equ P1.1
