@@ -338,10 +338,27 @@ Init_L2:
 MainProgram:
     mov SP, #0x7f ; Setup stack pointer to the start of indirectly accessable data memory minus one
     lcall Init_all ; Initialize the hardware
-	
+	sjmp forever
+Forever:
+
+    ; Measure the frequency applied to pin T0 (T0 is routed to pin P0.0 using the 'crossbar')
+    clr TR0 ; Stop counter 0
+    mov TL0, #0
+    mov TH0, #0
+    setb TR0 ; Start counter 0
+    lcall Wait_one_second
+    clr TR0 ; Stop counter 0, TH0-TL0 has the frequency
+
+	; Convert the result to BCD and display on LCD
+	Set_Cursor(2, 1)
+    lcall hex2bcd
+    lcall DisplayBCD
+
+	ljmp forever_loop
+
 forever_loop:
 	jb RI, serial_get
-	jb P3.7, forever_loop ; Check if push-button pressed
+	jb P3.7, Forever ; Check if push-button pressed
 	jnb P3.7, $ ; Wait for push-button release
 	; Play the whole memory
 	clr TR2 ; Stop Timer 2 ISR from playing previous request
@@ -368,7 +385,7 @@ forever_loop:
 	
 	setb SPEAKER ; Turn on speaker.
 	setb TR2 ; Start playback by enabling Timer 2
-	ljmp forever_loop
+	ljmp Forever
 	
 serial_get:
 	lcall getchar ; Wait for data to arrive
@@ -461,7 +478,7 @@ Command_3_loop:
 	ljmp forever_loop	
 Command_3_skip:
 
-;---------------------------------------------------------	
+;---------------------------f------------------------------	
 	cjne a, #'4' , Command_4_skip 
 Command_4_start: ; Playback a portion of the stored wav file
 	clr TR2 ; Stop Timer 2 ISR from playing previous request
