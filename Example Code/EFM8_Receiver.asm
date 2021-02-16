@@ -46,7 +46,14 @@ READ_DEVICE_ID   EQU 0x9f  ; Address:0 Dummy:2 Num:1 to infinite
 ; Variables used in the program:
 dseg at 30H
 	w:   ds 3 ; 24-bit play counter.  Decremented in Timer 2 ISR.
+x:		ds	4
+y:		ds	4
+z:		ds	4
+R:      ds  4
+bcd:	ds	5
+bseg
 
+mf:		dbit 1
 ; Interrupt vectors:
 cseg
 
@@ -71,6 +78,20 @@ org 0x0023 ; Serial port receive/transmit interrupt vector (not used in this cod
 org 0x005b ; Timer 2 interrupt vector.  Used in this code to replay the wave file.
 	ljmp Timer2_ISR
 
+;LCD Pin assignment:
+LCD_RS equ P1.7
+LCD_RW equ P1.6 
+LCD_E  equ P1.5
+LCD_D4 equ P1.4
+LCD_D5 equ P1.3
+LCD_D6 equ P1.2
+LCD_D7 equ P1.1
+;library used
+$NOLIST
+$include(LCD_4bit2.inc)
+$include(math32.inc)
+$LIST
+Msg1:  db 'TEST:', 0
 
 ;-------------------------------------;
 ; ISR for Timer 2.  Used to playback  ;
@@ -79,6 +100,15 @@ org 0x005b ; Timer 2 interrupt vector.  Used in this code to replay the wave fil
 ;-------------------------------------;
 Timer2_ISR:
 	mov	SFRPAGE, #0x00
+	; The register SFRPAGE Register is used to specifiy the SFR Page used when reading, writing, or modifying special function registers.
+	; SFR stands for Special Function Register
+	; The memory-mapped address space allotment for SFRs in the 8051 architecture is limited to 128 Bytes at addresses 0x80 to 0xFF. 
+	; Paging allows addresses 0x80 to 0xFF to access more than 128 SFRs.
+	; The SFRPAGE register only needs to be changed in the case that the SFR to be accessed does not exist on the currently-selected page.
+	; Setting SFRPAGE to 0x00 means to reset the register
+	; Check Page 33 of the Reference Manual for more information
+
+
 	clr	TF2H ; Clear Timer2 interrupt flag
 
 	; The registers used in the ISR must be saved in the stack
@@ -103,19 +133,23 @@ keep_playing:
 
 	setb SPEAKER
 	lcall Send_SPI ; Read the next byte from the SPI Flash...
-	
+	; Now, we should have recieved a byte stored in the accumulator from the SPI already
 	; It gets a bit complicated here because we read 8 bits from the flash but we need to write 12 bits to DAC:
+
 	mov SFRPAGE, #0x30 ; DAC registers are in page 0x30
 	push acc ; Save the value we got from flash
-	swap a
-	anl a, #0xf0
-	mov DAC0L, a
+	swap a;  SWAP A interchanges the low- and high-order nibbles (four-bit fields) of the Accumulator (bits 3 through 0 and bits 7 through 4).
+	anl a, #0xf0;0xf0=1111_0000； ANDing the original low-order four-bit
+	mov DAC0L, a;DAC0L: LOW-Order 4-bit_0000
 	pop acc
 	swap a
-	anl a, #0x0f
-	mov DAC0H, a
+	anl a, #0x0f;0x0f=0000_1111； ANDing the original high-order four-bit
+	mov DAC0H, a; DAC0H: 0000_High-Order 4-bit
 	mov SFRPAGE, #0x00
-	
+	; DAC stands for digitl to analog converter
+	; Each DAC includes a low byte data register (DACnL) and a high byte data register (DACnH). 
+	; By default, the 12 data bits are rightjustified, meaning that the four MSBs are located in the lower four bits of DACnH and the eight LSBs are located in DACnL. 
+	; When updating the DACn input, DACnL must always be written first.
 	sjmp Timer2_ISR_Done
 
 stop_playing:
@@ -154,9 +188,17 @@ getchar_L1:
 ;---------------------------------;
 Send_SPI:
 	mov	SPI0DAT, a
+	;The SPI0DAT register is used to transmit and receive SPI0 data. 
+	;Writing data to SPI0DAT places the data into the transmitbuffer and initiates a transfer when in master mode. 
+	;A read of SPI0DAT returns the contents of the receive buffer.
+	;PAGE 0x00,0x20
+	;Here we placed the data we want to transfer out in the accumulator and moved it to SPI0DAT to in daicate we'd like to transfer a byte
 Send_SPI_L1:
 	jnb	SPIF, Send_SPI_L1 ; Wait for SPI transfer complete
 	clr SPIF ; Clear SPI complete flag 
+	;This bit is set to logic 1 by hardware at the end of a data transfer. 
+	;If SPIF interrupts are enabled with the SPIFEN bit, an interrupt will be generated. 
+	;This bit is not automatically cleared by hardware, and must be cleared by firmware.
 	mov	a, SPI0DAT
 	ret
 
@@ -225,7 +267,7 @@ Init_L2:
 	mov	P0MDOUT, #0x1D ; SCK, MOSI, P0.3, TX0 are push-pull, all others open-drain
 
 	mov	XBR0, #0x03 ; Enable SPI and UART0: SPI0E=1, URT0E=1
-	mov	XBR1, #0x00
+	mov	XBR1, #0x10;  Enable Timer 0
 	mov	XBR2, #0x40 ; Enable crossbar and weak pull-ups
 
 	; Enable serial communication and set up baud rate using timer 1
@@ -268,6 +310,22 @@ Init_L2:
 	setb ET2 ; Enable Timer 2 interrupts
 	; setb TR2 ; Timer 2 is only enabled to play stored sound
 	
+
+
+	lcall LCD_4BIT; initialize LCD
+
+	; set up timer 0
+	clr TR0 ; Stop timer 0
+    mov a, TMOD
+    anl a, #0b_1111_0000 ; Clear the bits of timer/counter 0
+    orl a, #0b_0000_0101 ; Sets the bits of timer/counter 0 for a 16-bit counter
+    mov TMOD, a
+
+	; Configure LCD and display initial message
+
+	Set_Cursor(1, 1)
+    Send_Constant_String(#Msg1)
+
 	setb EA ; Enable interrupts
 	
 	ret
