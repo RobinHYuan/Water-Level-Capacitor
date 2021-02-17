@@ -1,18 +1,22 @@
 cseg
 
-; When using a 22.1184MHz crystal in fast mode
-; one cycle takes 1.0/22.1184MHz = 45.21123 ns
+; When using a 72MHz crystal in fast mode
+; one cycle takes 1.0/72MHz = 13.89 ns
 
 ;---------------------------------;
 ; Wait 40 microseconds            ;
 ;---------------------------------;
 Wait40uSec:
 	push AR0
-	mov R0, #177
-L0: 
+	push AR1
+	mov R1, #3
+L1_40us:	mov R0, #196
+L0_40us: 
 	nop
 	nop
-	djnz R0, L0 ; 1+1+3 cycles->5*45.21123ns*177=40us
+	djnz R0, L0_40us ; 1+1+3 cycles->5*13.89ns*196=13.61us
+	djnz R1, L1_40us ; 13.61us*3=40.83us
+	pop AR1
 	pop AR0
     ret
 
@@ -29,11 +33,11 @@ endmac
 ?Wait_Milli_Seconds:
 	push AR0
 	push AR1
-L3: mov R1, #45
-L2: mov R0, #166
-L1: djnz R0, L1 ; 3 cycles->3*45.21123ns*166=22.51519us
-    djnz R1, L2 ; 22.51519us*45=1.013ms
-    djnz R2, L3 ; number of millisecons to wait passed in R2
+L3_ms: mov R1, #138
+L2_ms: mov R0, #180
+L1_ms: djnz R0, L1_ms ; 3 cycles->3*13.89ns*180=7.347us
+    djnz R1, L2_ms ; 7.347us*138=1.013ms
+    djnz R2, L3_ms ; number of milliseconds to wait passed in R2
     pop AR1
     pop AR0
     ret
@@ -106,9 +110,7 @@ LCD_4BIT:
 	clr LCD_RW  ; We are only writing to the LCD in this program
 	
 	; After power on, let the LCD start up before initializing
-	; NOTE: the preprogrammed power-on delay of 16 ms on the AT89LP52
-	; seems to be enough.  That is why this line is commented out.
-	; Wait_Milli_Seconds(#40)
+	Wait_Milli_Seconds(#40)
 	
 	; First make sure the LCD is in 8-bit mode and then change to 4-bit mode
 	WriteCommand(#0x33)
@@ -158,11 +160,11 @@ Set_Cursor mac
 	lcall ?Set_Cursor_%0 ; Select column and row
 	pop acc
 endmac
-
 ?Set_Cursor_2:
 	orl a, #01000000B
 ?Set_Cursor_1:
 	orl a, #10000000B
+
 	ljmp ?WriteCommand ; Select column and row
 
 ;---------------------------------;
