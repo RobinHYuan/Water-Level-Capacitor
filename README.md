@@ -6,7 +6,7 @@ NEW LCD PIN Assignment:\
   LCD_RS  equ P1.7\
   LCD_RW  equ P1.6\
   LCD_E   equ P1.5\
-  LCD_D4  equ P2.2
+  LCD_D4  equ P2.2\
   LCD_D5  equ P2.3\
   LCD_D6  equ P2.4\
   LCD_D7  equ P2.5
