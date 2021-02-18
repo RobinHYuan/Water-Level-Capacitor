@@ -48,10 +48,12 @@ dseg at 30H
 w:   ds 3 ; 24-bit play counter.  Decremented in Timer 2 ISR.
 x:		ds	4
 y:		ds	4
+z:      ds  4
 R:      ds  4
 bcd:	ds	5
 bseg
 mf:		dbit 1
+mask:   dbit 1
 ; Interrupt vectors:
 cseg
 
@@ -86,8 +88,77 @@ LCD_D7 equ P2.5
 ;library used
 $NOLIST
 $include(LCD_4bit.inc)
+$include(math32.inc)
 $LIST 
-Msg1:  db 'Frequency(Hz):', 0
+Msg1:  db 'Capacitance:', 0
+Msg2:  db 'nF', 0
+Hex2bcd:
+	clr a
+    mov R0, #0  ; Set packed BCD result to 00000 
+    mov R1, #0
+    mov R2, #0
+    mov R3, #16 ; Loop counter.
+    
+hex2bcd_L0:
+    mov a, TL0 ; Shift TH0-TL0 left through carry
+    rlc a
+    mov TL0, a
+    
+    mov a, TH0
+    rlc a
+    mov TH0, a
+    
+	; Perform bcd + bcd + carry
+	; using BCD numbers
+	mov a, R0
+	addc a, R0
+	da a
+	mov R0, a
+	
+	mov a, R1
+	addc a, R1
+	da a
+	mov R1, a
+	
+	mov a, R2
+	addc a, R2
+	da a
+	mov R2, a
+	
+	djnz R3, hex2bcd_L0
+	ret
+
+; Dumps the 5-digit packed BCD number in R2-R1-R0 into the LCD
+DisplayBCD:
+	; 5th digit:
+    mov a, R2
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 4th digit:
+    mov a, R1
+    swap a
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 3rd digit:
+    mov a, R1
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 2nd digit:
+    mov a, R0
+    swap a
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 1st digit:
+    mov a, R0
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+    
+    ret
 ;-------------------------------------;
 ; ISR for Timer 2.  Used to playback  ;
 ; the WAV file stored in the SPI      ;
@@ -305,7 +376,7 @@ Init_L2:
 Wait_one_second:	
     ;For a 24.5MHz clock one machine cycle takes 1/24.5MHz=40.81633ns
 
-    mov R2, #183 ; Calibrate using this number to account for overhead delays
+    mov R2, #153; Calibrate using this number to account for overhead delays
 X3: mov R1, #255
 X2: mov R0, #255
 X1: djnz R0, X1 ; 3 machine cycles -> 3*40.81633ns*255=31.2245us (see table 10.2 in reference manual)
@@ -314,97 +385,56 @@ X1: djnz R0, X1 ; 3 machine cycles -> 3*40.81633ns*255=31.2245us (see table 10.2
     ret
 	
 
-;Converts the hex number in TH0-TL0 to packed BCD in R2-R1-R0
-hex2bcd:
-	clr a
-    mov R0, #0  ; Set packed BCD result to 00000 
-    mov R1, #0
-    mov R2, #0
-    mov R3, #16 ; Loop counter.
-    
-hex2bcd_L0:
-    mov a, TL0 ; Shift TH0-TL0 left through carry
-    rlc a
-    mov TL0, a
-    
-    mov a, TH0
-    rlc a
-    mov TH0, a
-    
-	; Perform bcd + bcd + carry
-	; using BCD numbers
-	mov a, R0
-	addc a, R0
-	da a
-	mov R0, a
-	
-	mov a, R1
-	addc a, R1
-	da a
-	mov R1, a
-	
-	mov a, R2
-	addc a, R2
-	da a
-	mov R2, a
-	
-	djnz R3, hex2bcd_L0
-	ret
-
-; Dumps the 5-digit packed BCD number in R2-R1-R0 into the LCD
-DisplayBCD:
-	; 5th digit:
-    mov a, R2
-    anl a, #0FH
-    orl a, #'0' ; convert to ASCII
-	lcall ?WriteData
-	; 4th digit:
-    mov a, R1
-    swap a
-    anl a, #0FH
-    orl a, #'0' ; convert to ASCII
-	lcall ?WriteData
-	; 3rd digit:
-    mov a, R1
-    anl a, #0FH
-    orl a, #'0' ; convert to ASCII
-	lcall ?WriteData
-	; 2nd digit:
-    mov a, R0
-    swap a
-    anl a, #0FH
-    orl a, #'0' ; convert to ASCII
-	lcall ?WriteData
-	; 1st digit:
-    mov a, R0
-    anl a, #0FH
-    orl a, #'0' ; convert to ASCII
-	lcall ?WriteData
-    
-    ret
 MainProgram:
     mov SP, #0x7f ; Setup stack pointer to the start of indirectly accessable data memory minus one
     lcall Init_all ; Initialize the hardware
 	lcall LCD_4BIT 
-	Set_Cursor(1, 1)
+	clr mask
+	 Set_Cursor(1, 1)
     Send_Constant_String(#Msg1)
-    
+    Set_Cursor(2, 11)
+    Send_Constant_String(#Msg2)
 forever_loop:
 	clr TR0 ; Stop counter 0
     mov TL0, #0x00
     mov TH0, #0x00
     setb TR0 ; Start counter 0
     lcall Wait_one_second
-     lcall Wait_one_second
+
     clr TR0 ; Stop counter 0, TH0-TL0 has the frequency
 	; Convert the result to BCD and display on LCD
-	Set_Cursor(2, 1)
+
+    
+	load_x(144)
+	load_y(100000)
+	lcall mul32
+	load_y(63)
+	lcall div32
+	mov y+0,TL0
+	mov y+1,TH0
+	mov y+2,#0x00
+	mov y+3,#0x00
+	lcall div32
+
+	mov TL0, x+0
+	mov TH0, x+1
+	
+
+	Set_Cursor(2, 5)
     lcall hex2bcd
     lcall DisplayBCD
+    load_y(12)
+    jb RI, serial_get
+    jnb mask,compare
+    ljmp forever_loop
     
-	jb RI, serial_get
-	jb P3.7, forever_loop ; Check if push-button pressed
-	jnb P3.7, $ ; Wait for push-button release
+    
+ compare:
+  	lcall x_gt_y
+	jnb mf,forever_loop
+	setb mask
+	;jb 7, forever_loop ; Check if push-button pressed
+	;jnb P3.7, $ ; Wait for push-button release
 	; Play the whole memory
 	clr TR2 ; Stop Timer 2 ISR from playing previous request
 	setb FLASH_CE
@@ -431,10 +461,11 @@ forever_loop:
 	setb SPEAKER ; Turn on speaker.
 	setb TR2 ; Start playback by enabling Timer 2
 	ljmp forever_loop
-	
+forever:
+ljmp forever_loop
 serial_get:
 	lcall getchar ; Wait for data to arrive
-	cjne a, #'#', forever_loop ; Message format is #n[data] where 'n' is '0' to '9'
+	cjne a, #'#', forever ; Message format is #n[data] where 'n' is '0' to '9'
 	clr TR2 ; Stop Timer 2 from playing previous request
 	setb FLASH_CE ; Disable SPI Flash	
 	clr SPEAKER ; Turn off speaker.
