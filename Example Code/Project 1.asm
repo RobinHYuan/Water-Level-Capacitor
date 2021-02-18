@@ -87,7 +87,7 @@ LCD_D7 equ P2.5
 $NOLIST
 $include(LCD_4bit.inc)
 $LIST 
-Msg1:  db 'TEST:A1', 0
+Msg1:  db 'Frequency(Hz):', 0
 ;-------------------------------------;
 ; ISR for Timer 2.  Used to playback  ;
 ; the WAV file stored in the SPI      ;
@@ -241,7 +241,7 @@ Init_L2:
 	mov	P0MDOUT, #0x1D ; SCK, MOSI, P0.3, TX0 are push-pull, all others open-drain
 
 	mov	XBR0, #0x03 ; Enable SPI and UART0: SPI0E=1, URT0E=1
-	mov	XBR1, #0x00
+	mov	XBR1, #0x10
 	mov	XBR2, #0x40 ; Enable crossbar and weak pull-ups
 
 	; Enable serial communication and set up baud rate using timer 1
@@ -284,6 +284,15 @@ Init_L2:
 	setb ET2 ; Enable Timer 2 interrupts
 	; setb TR2 ; Timer 2 is only enabled to play stored sound
 	
+	; initialize Timer 0 as a 16bit counter
+	mov	SFRPAGE, #0x00
+	mov p0skip,#0b0000_1000
+	mov a, TMOD
+    anl a, #0b_1111_0000 ; Clear the bits of timer/counter 0
+    orl a, #0b_0000_0101 ; Sets the bits of timer/counter 0 for a 16-bit counter
+    mov TMOD, a
+	
+	
 	setb EA ; Enable interrupts
 	
 	ret
@@ -293,13 +302,106 @@ Init_L2:
 ; initialization and 'forever'    ;
 ; loop.                           ;
 ;---------------------------------;
+Wait_one_second:	
+    ;For a 24.5MHz clock one machine cycle takes 1/24.5MHz=40.81633ns
+
+    mov R2, #183 ; Calibrate using this number to account for overhead delays
+X3: mov R1, #255
+X2: mov R0, #255
+X1: djnz R0, X1 ; 3 machine cycles -> 3*40.81633ns*255=31.2245us (see table 10.2 in reference manual)
+    djnz R1, X2 ; 31.2245us*255=7.96224ms
+    djnz R2, X3 ; 7.96224ms*125=0.995s + overhead
+    ret
+	
+
+;Converts the hex number in TH0-TL0 to packed BCD in R2-R1-R0
+hex2bcd:
+	clr a
+    mov R0, #0  ; Set packed BCD result to 00000 
+    mov R1, #0
+    mov R2, #0
+    mov R3, #16 ; Loop counter.
+    
+hex2bcd_L0:
+    mov a, TL0 ; Shift TH0-TL0 left through carry
+    rlc a
+    mov TL0, a
+    
+    mov a, TH0
+    rlc a
+    mov TH0, a
+    
+	; Perform bcd + bcd + carry
+	; using BCD numbers
+	mov a, R0
+	addc a, R0
+	da a
+	mov R0, a
+	
+	mov a, R1
+	addc a, R1
+	da a
+	mov R1, a
+	
+	mov a, R2
+	addc a, R2
+	da a
+	mov R2, a
+	
+	djnz R3, hex2bcd_L0
+	ret
+
+; Dumps the 5-digit packed BCD number in R2-R1-R0 into the LCD
+DisplayBCD:
+	; 5th digit:
+    mov a, R2
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 4th digit:
+    mov a, R1
+    swap a
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 3rd digit:
+    mov a, R1
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 2nd digit:
+    mov a, R0
+    swap a
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+	; 1st digit:
+    mov a, R0
+    anl a, #0FH
+    orl a, #'0' ; convert to ASCII
+	lcall ?WriteData
+    
+    ret
 MainProgram:
     mov SP, #0x7f ; Setup stack pointer to the start of indirectly accessable data memory minus one
     lcall Init_all ; Initialize the hardware
 	lcall LCD_4BIT 
 	Set_Cursor(1, 1)
     Send_Constant_String(#Msg1)
+    
 forever_loop:
+	clr TR0 ; Stop counter 0
+    mov TL0, #0x00
+    mov TH0, #0x00
+    setb TR0 ; Start counter 0
+    lcall Wait_one_second
+     lcall Wait_one_second
+    clr TR0 ; Stop counter 0, TH0-TL0 has the frequency
+	; Convert the result to BCD and display on LCD
+	Set_Cursor(2, 1)
+    lcall hex2bcd
+    lcall DisplayBCD
+    
 	jb RI, serial_get
 	jb P3.7, forever_loop ; Check if push-button pressed
 	jnb P3.7, $ ; Wait for push-button release
