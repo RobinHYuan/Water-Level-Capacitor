@@ -1,13 +1,13 @@
 ## Water-Level-Capacitor
 
 #### NEW LCD PIN ASSIGNMENT:
-  LCD_RS  equ P1.7\
-  LCD_RW  equ P1.6\
+  LCD_RS  &nbsp;equ P1.7\
+  LCD_RW &nbsp; equ P1.6\
   LCD_E  &nbsp; equ P1.5\
-  LCD_D4  equ P2.2\
-  LCD_D5  equ P2.3\
-  LCD_D6  equ P2.4\
-  LCD_D7  equ P2.5\
+  LCD_D4  &nbsp;equ P2.2\
+  LCD_D5  &nbsp;equ P2.3\
+  LCD_D6 &nbsp; equ P2.4\
+  LCD_D7  &nbsp; equ P2.5\
 **Note:**\
   **Timer 0 input** should be at **Pin 0.6** as UART0 and SPI0 has occupied Pin 0.0 to 0.5.
   
