@@ -17,7 +17,7 @@
 
 #### Update History:
 **2021-02-18; 22:06:12; Thursday**
-- The unit of the capacitance is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
+- The unit of capacitance displayed on LCD is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
 
 ------------
 #### Task List:
