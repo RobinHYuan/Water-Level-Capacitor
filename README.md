@@ -46,7 +46,7 @@ For this project, we will design, build, program, and test a microcontroller bas
 - [ ] Reduce the frequency measuring period to one-forth of a second for a faster feedback 
 ------------
 ### Schematic:
-<img src="https://user-images.githubusercontent.com/68177491/108474843-c5fd8180-7244-11eb-9bd0-d1f16b9fe390.jpg" width="95" height="95"/>
+<img src="https://user-images.githubusercontent.com/68177491/108474843-c5fd8180-7244-11eb-9bd0-d1f16b9fe390.jpg" width="100" height="100"/>
 
 ------------
 ### Breadboard Layout:
