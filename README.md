@@ -9,5 +9,16 @@
   LCD_D6  equ P2.4
   LCD_D7  equ P2.5
 **  Note:**
-  **Timer 0 input** should be at **Pin 0.6 **as UART0 and SPI0 has occupied Pin 0.0 to 0.5
+  **Timer 0 input** should be at **Pin 0.6 **as UART0 and SPI0 has occupied Pin 0.0 to 0.5.
+  
+
+------------
+
+
 #####   Update History:
+** 2021-02-18; 22:06:12; Thursday**
+- The unit of the capacitance is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
+
+------------
+
+
