@@ -46,16 +46,16 @@ For this project, we will design, build, program, and test a microcontroller bas
 - [ ] Reduce the frequency measuring period to one-forth of a second for a faster feedback 
 ------------
 ### Schematic:
-<img src="https://user-images.githubusercontent.com/68177491/108474843-c5fd8180-7244-11eb-9bd0-d1f16b9fe390.jpg" width="100" height="100"/>
+<img src="https://user-images.githubusercontent.com/68177491/108474843-c5fd8180-7244-11eb-9bd0-d1f16b9fe390.jpg" width="512" height="683"/>
 
 ------------
 ### Breadboard Layout:
+<img src="https://user-images.githubusercontent.com/68177491/108475285-5c31a780-7245-11eb-95e6-f33e19c6c2ad.jpg" width="504" height="672"/>
 
-![WeChat Image_20210218235919](https://user-images.githubusercontent.com/68177491/108475285-5c31a780-7245-11eb-95e6-f33e19c6c2ad.jpg)
 
 ------------
 ### Robin's Message:
+<img src="https://user-images.githubusercontent.com/68177491/108470137-54bad000-723e-11eb-8eb2-a700d3040374.png" width="622" height="875"/>
 
-![yande re 384170 dress fate_stay_night fate_stay_night_heaven's_feel matou_sakura possibly_upscaled_ saber toosaka_rin](https://user-images.githubusercontent.com/68177491/108470137-54bad000-723e-11eb-8eb2-a700d3040374.png)
 
 **Matou Sakura is the best girl**
