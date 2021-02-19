@@ -43,7 +43,7 @@ For this project, we will design, build, program, and test a microcontroller bas
 - [ ] Timer 3 ISR for counting one second 
 - [ ] Add push-button algorithms to indicate when to start measuring the capacitance
 - [ ] New library for the 1604 LCD
-
+- [ ] Reduce the frequency measuring period to one-forth of a second for a faster feedback 
 ------------
 ### Schematic:
 
