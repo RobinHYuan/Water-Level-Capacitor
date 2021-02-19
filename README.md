@@ -20,5 +20,11 @@
 - The unit of the capacitance is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
 
 ------------
+#### Task List:
+[] Find the relationship between the height of liquid in the cup and its capacitance
+[] Indicate water level at different height
+[] Timer 3 ISR for counting one second 
+[] Add push button algorithms to indicate when to start measuring the capacitance
+[] New library for the 1604 LCD
 
 
