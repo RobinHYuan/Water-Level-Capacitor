@@ -40,7 +40,7 @@ For this project, we will design, build, program, and test a microcontroller bas
 - [ ] Find the relationship between the height of liquid in the cup and its capacitance
 - [ ] Indicate water level at different height
 - [ ] Timer 3 ISR for counting one second 
-- [ ] Add push button algorithms to indicate when to start measuring the capacitance
+- [ ] Add push-button algorithms to indicate when to start measuring the capacitance
 - [ ] New library for the 1604 LCD
 
 
