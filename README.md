@@ -47,7 +47,6 @@ For this project, we will design, build, program, and test a microcontroller bas
 ------------
 ### Schematic:
 
-![151939751_943717546373560_8256166268456347376_o](https://user-images.githubusercontent.com/68177491/108474843-c5fd8180-7244-11eb-9bd0-d1f16b9fe390.jpg)
 
 
 ------------
