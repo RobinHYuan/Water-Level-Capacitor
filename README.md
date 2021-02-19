@@ -1,6 +1,5 @@
 
-## ELEC 291 Project 1:
-## Water-Level-Capacitor
+## ELEC 291 Project 1: Water-Level-Capacitor
 
 ------------
 ### Introduction:
