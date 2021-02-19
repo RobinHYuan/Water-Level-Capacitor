@@ -91,7 +91,7 @@ $include(LCD_4bit.inc)
 $include(math32.inc)
 $LIST 
 Msg1:  db 'Capacitance:', 0
-Msg2:  db 'nF', 0
+Msg2:  db 'pF', 0
 Hex2bcd:
 	clr a
     mov R0, #0  ; Set packed BCD result to 00000 
@@ -408,8 +408,11 @@ forever_loop:
 	load_x(144)
 	load_y(100000)
 	lcall mul32
+
 	load_y(63)
 	lcall div32
+	load_y(1000)
+	lcall mul32
 	mov y+0,TL0
 	mov y+1,TH0
 	mov y+2,#0x00
@@ -427,11 +430,9 @@ forever_loop:
     jb RI, serial_get
     jnb mask,compare
     ljmp forever_loop
-    
-    
  compare:
   	lcall x_gt_y
-	jnb mf,forever_loop
+	jnb mf,forever
 	setb mask
 	;jb 7, forever_loop ; Check if push-button pressed
 	;jnb P3.7, $ ; Wait for push-button release
