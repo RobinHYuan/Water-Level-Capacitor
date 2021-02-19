@@ -1,4 +1,4 @@
-# Water-Level-Capacitor
+## Water-Level-Capacitor
 
 #### NEW LCD PIN ASSIGNMENT:
   LCD_RS  equ P1.7\
