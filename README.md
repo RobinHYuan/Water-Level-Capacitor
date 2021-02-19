@@ -1,13 +1,13 @@
 ## Water-Level-Capacitor
 
 ------------
-#### Introduction:
+### Introduction:
 
 For this project, we will design, build, program, and test a microcontroller based capacitive water level detector.  The main purpose of this device is to aid visually impaired people to serve drinks.  For  this  project,  the  level  of  the  dielectric  (water)  of  a  conical-plate  capacitor  will  be  used  to sense  water  level.  A  microcontroller  system  will be  used  to  estimate  such  liquid  level  and provided audible feedback to the user. 
 
 ------------
 
-#### Team Member:
+### Team Member:
 
   Andi Li\
   Jerry Shao\
@@ -16,7 +16,7 @@ For this project, we will design, build, program, and test a microcontroller bas
   
 ------------
 
-#### New LCD Pin Assignment:
+### New LCD Pin Assignment:
 
   LCD_RS  equ P1.7\
   LCD_RW  equ P1.6\
@@ -32,12 +32,12 @@ For this project, we will design, build, program, and test a microcontroller bas
 ------------
 
 
-#### Update History:
+### Update History:
 **2021-02-18; 22:06:12; Thursday**
 - The unit of capacitance displayed on LCD is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
 
 ------------
-#### Task List:
+### Task List:
 - [ ] Find the relationship between the height of liquid in the cup and its capacitance
 - [ ] Indicate water level at different height
 - [ ] Timer 3 ISR for counting one second 
@@ -45,7 +45,18 @@ For this project, we will design, build, program, and test a microcontroller bas
 - [ ] New library for the 1604 LCD
 
 ------------
-#### Robin's Message:
+### Schematic:
+
+![151939751_943717546373560_8256166268456347376_o](https://user-images.githubusercontent.com/68177491/108474843-c5fd8180-7244-11eb-9bd0-d1f16b9fe390.jpg)
+
+
+------------
+### Breadboard Layout:
+
+![WeChat Image_20210218235919](https://user-images.githubusercontent.com/68177491/108475285-5c31a780-7245-11eb-95e6-f33e19c6c2ad.jpg)
+
+------------
+### Robin's Message:
 
 ![yande re 384170 dress fate_stay_night fate_stay_night_heaven's_feel matou_sakura possibly_upscaled_ saber toosaka_rin](https://user-images.githubusercontent.com/68177491/108470137-54bad000-723e-11eb-8eb2-a700d3040374.png)
 
