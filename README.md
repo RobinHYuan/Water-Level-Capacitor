@@ -21,10 +21,10 @@
 
 ------------
 #### Task List:
-[ ] Find the relationship between the height of liquid in the cup and its capacitance
-[ ] Indicate water level at different height
-[ ] Timer 3 ISR for counting one second 
-[ ] Add push button algorithms to indicate when to start measuring the capacitance
-[ ] New library for the 1604 LCD
+- [ ] Find the relationship between the height of liquid in the cup and its capacitance
+- [ ] Indicate water level at different height
+- [ ] Timer 3 ISR for counting one second 
+- [ ] Add push button algorithms to indicate when to start measuring the capacitance
+- [ ] New library for the 1604 LCD
 
 
