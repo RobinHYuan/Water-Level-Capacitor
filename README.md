@@ -1,7 +1,9 @@
 ## Water-Level-Capacitor
 ------------
 #### Introduction:
+
 For this project, we will design, build, program, and test a microcontroller based capacitive water level detector.  The main purpose of this device is to aid visually impaired people to serve drinks.  For  this  project,  the  level  of  the  dielectric  (water)  of  a  conical-plate  capacitor  will  be  used  to sense  water  level.  A  microcontroller  system  will be  used  to  estimate  such  liquid  level  and provided audible feedback to the user. 
+
 ------------
 
 #### Team Member:
