@@ -1,0 +1,3 @@
+Computer_Sender -DCOM12 -w -v pornhubintro.wav
+Computer_Sender -DCOM8 -w -v pornhubintro.wav
+cd C:\Users\circl\OneDrive\Desktop\ELEC-Y2T2\ELEC 291_Electrical Engineering Design Studio I\Project 1\Example Code
