@@ -60,9 +60,17 @@ Make sure you get all your libraries from this folder instead of your achived la
 
 ## PART C, D AND E:
 1. After flashing and reseting the EFM8, you should be able to see a string, "LCD IS WORKING" displayed on the LCD
+
+  <img src="https://user-images.githubusercontent.com/68177491/108593207-4e545300-7327-11eb-9c07-8737f5f5159e.jpg" width="378" height="504"/>\
+
 2. In five seconds, the LCD will start to display the reading of the capacitance meter 
+
+<img src="https://user-images.githubusercontent.com/68177491/108593261-9d01ed00-7327-11eb-9a50-7ac01816d871.jpg" width="378" height="504"/>\
+
 3. Three seconds later, if you hold the boot button for one second and then release it, the LCD will show another string, "SPEAKER IS ON". Meanwhile, you should also be able to hear voice from the speaker
 
+<img src="https://user-images.githubusercontent.com/68177491/108593263-9e331a00-7327-11eb-9516-349f91ae194c.jpg" width="378" height="504"/>\
+                                                                                                                                        
 -------------
 **This test project is sponsored by Matou Sakura**\
 <img src="https://user-images.githubusercontent.com/68177491/108592567-3f6ba180-7323-11eb-9a9e-3023a3b0d357.jpg" width="512" height="384"/>
