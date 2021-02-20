@@ -7,6 +7,12 @@ For this project, we will design, build, program, and test a microcontroller bas
 
 ------------
 
+### Announcement：
+
+  **Note for Andi:** \
+  Follow the given instructions in the "Test" folder to see whether the board is operating as expected 
+  
+------------
 ### Team Member:
 
   Andi Li\
@@ -34,8 +40,12 @@ For this project, we will design, build, program, and test a microcontroller bas
 
 ### Update History:
 **2021-02-18; 22:06:12; Thursday**
-- The unit of capacitance displayed on LCD is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
+- The unit of capacitance displayed on LCD is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.\
 
+**2021-02-20; 00:21:12; Saturday**
+- Now, the EFM8 Board can playback segments of the given wav file.
+- The size of Project1.asm has been reduced significantly by 250 lines as many unused functions given by Jesus are removed.
+- A test folder dedicated for Andi to test the prototype board will be created soon.
 ------------
 ### Task List:
 - [ ] Find the relationship between the height of liquid in the cup and its capacitance
