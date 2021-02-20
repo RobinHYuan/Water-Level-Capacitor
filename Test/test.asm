@@ -91,8 +91,11 @@ $include(LCD_4bit.inc)
 $include(math32.inc)
 
 $LIST 
+Msg0:  db 'LCD IS WORKING', 0
 Msg1:  db 'Capacitance:', 0
 Msg2:  db 'pF', 0
+Msg3:  db 'SPEAKER IS ON', 0
+Msg4:  db '               ',0
 Hex2bcd:
 	clr a
     mov R0, #0  ; Set packed BCD result to 00000 
@@ -391,6 +394,15 @@ MainProgram:
     lcall Init_all ; Initialize the hardware
 	lcall LCD_4BIT 
 	clr mask
+	Set_Cursor(1, 1)
+   Send_Constant_String(#Msg0)
+   lcall Wait_one_second
+   lcall Wait_one_second
+   lcall Wait_one_second
+   lcall Wait_one_second
+   lcall Wait_one_second
+   Set_Cursor(1, 1)
+   Send_Constant_String(#Msg4)
    Set_Cursor(1, 1)
    Send_Constant_String(#Msg1)
    Set_Cursor(2, 11)
@@ -420,15 +432,24 @@ forever_loop:
     lcall hex2bcd
     lcall DisplayBCD
     load_y(12)
-    ;measure Capacitance
+   lcall Wait_one_second
+   lcall Wait_one_second
+   lcall Wait_one_second
+
+
+cap:
     jb RI, serial_get
- 	 jb P3.7, forever_loop ; Check if push-button pressed
+ 	 jb P3.7,cap  ; Check if push-button pressed
 	jnb P3.7, $ ; Wait for push-button release
 	; Play the whole memory
+
+	Set_Cursor(1, 1)
+   Send_Constant_String(#Msg3)
+   Set_Cursor(2, 1)
+   Send_Constant_String(#Msg3)
 	clr TR2 ; Stop Timer 2 ISR from playing previous request
 	setb FLASH_CE
 	clr SPEAKER ; Turn off speaker.
-	
 	clr FLASH_CE ; Enable SPI Flash
 	mov a, #READ_BYTES
 	lcall Send_SPI
@@ -449,12 +470,12 @@ forever_loop:
 	
 	setb SPEAKER ; Turn on speaker.
 	setb TR2 ; Start playback by enabling Timer 2
-	ljmp forever_loop
+	ljmp cap
 forever:
 ljmp forever_loop
 serial_get:
 	lcall getchar ; Wait for data to arrive
-	cjne a, #'#', forever ; Message format is #n[data] where 'n' is '0' to '9'
+	cjne a, #'#', cap ; Message format is #n[data] where 'n' is '0' to '9'
 	clr TR2 ; Stop Timer 2 from playing previous request
 	setb FLASH_CE ; Disable SPI Flash	
 	clr SPEAKER ; Turn off speaker.
