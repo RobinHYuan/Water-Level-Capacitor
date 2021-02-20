@@ -40,7 +40,7 @@ For this project, we will design, build, program, and test a microcontroller bas
 
 ### Update History:
 **2021-02-18; 22:06:12; Thursday**
-- The unit of capacitance displayed on LCD is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.\
+- The unit of capacitance displayed on LCD is changed to pico farads now instead of  micro farads, which will give us a more preciese reading while adding the water into the cup.
 
 **2021-02-20; 00:21:12; Saturday**
 - Now, the EFM8 Board can playback segments of the given wav file.
