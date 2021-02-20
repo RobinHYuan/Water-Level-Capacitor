@@ -1,4 +1,4 @@
-# Instruction for Testing The prototpe Board
+# Instruction for Testing the Prototype Board
 
 ------------
 ## Procedures:
