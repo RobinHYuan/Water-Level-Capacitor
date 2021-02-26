@@ -1,3 +1,28 @@
-Computer_Sender -DCOM12 -w -v pornhubintro.wav
-Computer_Sender -DCOM8 -w -v pornhubintro.wav
-cd C:\Users\circl\OneDrive\Desktop\ELEC-Y2T2\ELEC 291_Electrical Engineering Design Studio I\Project 1\Example Code
+Computer_Sender -DCOM12 -w -v new.wav
+cd C:\Users\circl\OneDrive\Desktop\ELEC-Y2T2\ELEC 291_Electrical Engineering Design Studio I\Project 1\
+Computer_Sender -DCOM12 -?
+
+String:
+System is curretnly on, selecting drinks, water, tonic water, coke, please start pouring ,it is empty, 5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 70%, 75%, 80%, 85%, 90%, 95%, it is full
+
+
+Computer_Sender -DCOM12 -p0x0002d,36714/0x8F6A  [System is curretnly on] END POINT:0x00_8F_6A
+
+Computer_Sender -DCOM12 -p0x8F6A,31562/0x7B4A   [selecting drinks]       END POINT:0x01_0a_b4
+
+Computer_Sender -DCOM12 -p0x10ab4,18963/0x4A13  [water]                  END POINT:0x01_54_c7
+
+Computer_Sender -DCOM12 -p0x0154c7,25925/0x6545 [tonic water]            END POINT:0x01_ba_0c
+
+Computer_Sender -DCOM12 -p0x01ba0c,15160/0x3b38 [coke]                   END POINT:0x01_f5_44
+
+Computer_Sender -DCOM12 -p0x01f544,34308/0x8604 [please start pouring]   END POINT:0x01_f5_44
+
+
+
+
+
+
+
+
+
