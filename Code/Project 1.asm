@@ -1407,6 +1407,6 @@ label_zwanzig:
 	
 	;check mf == 1 jump to play cup is full
 	
-	ljmp label_iffy 
+	ljmp forever_loop
 
 end
