@@ -39,14 +39,26 @@ Computer_Sender -DCOM13 -p0x06023a,0x7250 [40%]                    END POINT:0x0
 Computer_Sender -DCOM13 -p0x06748a,0X8EEF [45%]                    END POINT:0x07_03_79
 
 Computer_Sender -DCOM13 -P0x070379,0X6F9F [50%]                    END POINT:0x07_73_18
+ 
+Computer_Sender -DCOM13 -P0x077318,0X8C31 [55%]                    END POINT:0x07_FF_49
 
+Computer_Sender -DCOM13 -P0x07FF49,0X78D9 [60%]                    END POINT:0x08_7b_22 
 
+Computer_Sender -DCOM13 -P0x087b22,0XB958 [65%]                    END POINT:0x09_34_7a
 
+Computer_Sender -DCOM13 -P0x09347a,0X5FD4 [70%]                    END POINT:0x09_94_4e
+ 
+Computer_Sender -DCOM13 -P0x09944e,0X9DDB [75%]                    END POINT:0x0a_32_29
 
+Computer_Sender -DCOM13 -P0x0a3229,0X6C35 [80%]                    END POINT:0x0a_9f_5e
 
+Computer_Sender -DCOM13 -P0x0a9f5e,0X8972 [85%]                    END POINT:0X0b_28_D0
 
+Computer_Sender -DCOM13 -P0X0b28D0,0X7688 [90%]                    END POINT:0x0b_9f_58
 
-
+Computer_Sender -DCOM13 -P0x0b9f58,0X9388 [95%]                    END POINT:0x0c_32_e0 
+ 
+Computer_Sender -DCOM13 -P0x0c32e0,0XFFFF [it is full]
 
 
 
