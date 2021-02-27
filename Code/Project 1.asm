@@ -642,7 +642,7 @@ Please_start_pouring:
 	setb SPEAKER 
  	ljmp forever_loop 
 	
-Percent_10:
+percent_10:
     ; Playback a portion of the stored wav file
 	clr TR2 ; Stop Timer 2 ISR from playing previous request
 	mov tr2,#0x00
@@ -758,6 +758,35 @@ percent_20:
 	setb SPEAKER 
  	ljmp forever_loop 
  	
+ percent_25:
+	 ; Playback a portion of the stored wav file
+	clr TR2 ; Stop Timer 2 ISR from playing previous request
+	mov tr2,#0x00
+	setb FLASH_CE
+	clr SPEAKER ; Turn off speaker.
+	 
+ 	clr FLASH_CE ; Enable SPI Flash
+ 	mov a, #READ_BYTES
+	lcall Send_SPI
+  	mov a, #0x04
+ 	lcall Send_SPI
+ 	mov a, #0x75
+ 	lcall Send_SPI
+  	mov a, #0x49
+ 	lcall Send_SPI
+ 	; Get how many bytes to play
+
+	mov w+2, #0x00
+ 	mov w+1, #0x92
+	mov w+0, #0xc6
+ 
+	mov a, #0x00 ; Request first byte to send to DAC
+ 	lcall Send_SPI
+ 
+ 	setb TR2 ; Start playback by enabling timer 2
+	setb SPEAKER 
+ 	ljmp forever_loop 
+ 
  percent_30:
 	clr TR2 ;
 	mov tr2,#0x00
@@ -767,17 +796,17 @@ percent_20:
  	clr FLASH_CE ; Enable SPI Flash
  	mov a, #READ_BYTES
 	lcall Send_SPI
-  	mov a, #0x01
+  	mov a, #0x05
  	lcall Send_SPI
- 	mov a, #0x46
+ 	mov a, #0x08
  	lcall Send_SPI
-  	mov a, #0x52
+  	mov a, #0x0f
  	lcall Send_SPI
  	; Get how many bytes to play
 
 	mov w+2, #0x00
- 	mov w+1, #0x45
-	mov w+0, #0x03
+ 	mov w+1, #0x6e
+	mov w+0, #0x58
  
 	mov a, #0x00 ; Request first byte to send to DAC
  	lcall Send_SPI
@@ -785,6 +814,35 @@ percent_20:
  	setb TR2 ; Start playback by enabling timer 2
 	setb SPEAKER 
  	ljmp forever_loop 	
+ 	
+ percent_35:
+	 ; Playback a portion of the stored wav file
+	clr TR2 ; Stop Timer 2 ISR from playing previous request
+	mov tr2,#0x00
+	setb FLASH_CE
+	clr SPEAKER ; Turn off speaker.
+	 
+ 	clr FLASH_CE ; Enable SPI Flash
+ 	mov a, #READ_BYTES
+	lcall Send_SPI
+  	mov a, #0x05
+ 	lcall Send_SPI
+ 	mov a, #0x76
+ 	lcall Send_SPI
+  	mov a, #0x67
+ 	lcall Send_SPI
+ 	; Get how many bytes to play
+
+	mov w+2, #0x00
+ 	mov w+1, #0x8B
+	mov w+0, #0xD3
+ 
+	mov a, #0x00 ; Request first byte to send to DAC
+ 	lcall Send_SPI
+ 
+ 	setb TR2 ; Start playback by enabling timer 2
+	setb SPEAKER 
+ 	ljmp forever_loop 
 	
  percent_40:
 	 ; Playback a portion of the stored wav file
@@ -796,23 +854,52 @@ percent_20:
  	clr FLASH_CE ; Enable SPI Flash
  	mov a, #READ_BYTES
 	lcall Send_SPI
-  	mov a, #0x01
+  	mov a, #0x06
  	lcall Send_SPI
- 	mov a, #0x8b
+ 	mov a, #0x02
  	lcall Send_SPI
-  	mov a, #0x56
+  	mov a, #0x3A
  	lcall Send_SPI
  	; Get how many bytes to play
 
 	mov w+2, #0x00
- 	mov w+1, #0x44
-	mov w+0, #0x1d
+ 	mov w+1, #0x72
+	mov w+0, #0x50
 	mov a, #0x00 ; Request first byte to send to DAC
  	lcall Send_SPI
  
  	setb TR2 ; Start playback by enabling timer 2
 	setb SPEAKER
 	ljmp forever_loop
+	
+percent_45:
+	 ; Playback a portion of the stored wav file
+	clr TR2 ; Stop Timer 2 ISR from playing previous request
+	mov tr2,#0x00
+	setb FLASH_CE
+	clr SPEAKER ; Turn off speaker.
+	 
+ 	clr FLASH_CE ; Enable SPI Flash
+ 	mov a, #READ_BYTES
+	lcall Send_SPI
+  	mov a, #0x06
+ 	lcall Send_SPI
+ 	mov a, #0x74
+ 	lcall Send_SPI
+  	mov a, #0x8A
+ 	lcall Send_SPI
+ 	; Get how many bytes to play
+
+	mov w+2, #0x00
+ 	mov w+1, #0x8E
+	mov w+0, #0xEF
+ 
+	mov a, #0x00 ; Request first byte to send to DAC
+ 	lcall Send_SPI
+ 
+ 	setb TR2 ; Start playback by enabling timer 2
+	setb SPEAKER 
+ 	ljmp forever_loop 
 
 percent_50:
 	; Playback a portion of the stored wav file
@@ -824,23 +911,52 @@ percent_50:
  	clr FLASH_CE ; Enable SPI Flash
  	mov a, #READ_BYTES
 	lcall Send_SPI
-  	mov a, #0x01
+  	mov a, #0x07
  	lcall Send_SPI
- 	mov a, #0xce
+ 	mov a, #0x03
  	lcall Send_SPI
-  	mov a, #0xa3
+  	mov a, #0x79
  	lcall Send_SPI
  	; Get how many bytes to play
 
 	mov w+2, #0x00
- 	mov w+1, #0x41
-	mov w+0, #0x8c
+ 	mov w+1, #0x6F
+	mov w+0, #0x9F
 	mov a, #0x00 ; Request first byte to send to DAC
  	lcall Send_SPI
  
  	setb TR2 ; Start playback by enabling timer 2
 	setb SPEAKER
 	ljmp forever_loop
+	
+percent_55:
+	 ; Playback a portion of the stored wav file
+	clr TR2 ; Stop Timer 2 ISR from playing previous request
+	mov tr2,#0x00
+	setb FLASH_CE
+	clr SPEAKER ; Turn off speaker.
+	 
+ 	clr FLASH_CE ; Enable SPI Flash
+ 	mov a, #READ_BYTES
+	lcall Send_SPI
+  	mov a, #0x07
+ 	lcall Send_SPI
+ 	mov a, #0x73
+ 	lcall Send_SPI
+  	mov a, #0x18
+ 	lcall Send_SPI
+ 	; Get how many bytes to play
+
+	mov w+2, #0x00
+ 	mov w+1, #0x8C
+	mov w+0, #0x31
+ 
+	mov a, #0x00 ; Request first byte to send to DAC
+ 	lcall Send_SPI
+ 
+ 	setb TR2 ; Start playback by enabling timer 2
+	setb SPEAKER 
+ 	ljmp forever_loop 
 
 percent_60:
 	 ; Playback a portion of the stored wav file
@@ -852,17 +968,17 @@ percent_60:
  	clr FLASH_CE ; Enable SPI Flash
  	mov a, #READ_BYTES
 	lcall Send_SPI
-  	mov a, #0x02
+  	mov a, #0x07
  	lcall Send_SPI
- 	mov a, #0x10
+ 	mov a, #0xFF
  	lcall Send_SPI
-  	mov a, #0x2f
+  	mov a, #0x49
  	lcall Send_SPI
  	; Get how many bytes to play
 
 	mov w+2, #0x00
- 	mov w+1, #0x44
-	mov w+0, #0x1d
+ 	mov w+1, #0x78
+	mov w+0, #0xD9
 	mov a, #0x00 ; Request first byte to send to DAC
  	lcall Send_SPI
  
