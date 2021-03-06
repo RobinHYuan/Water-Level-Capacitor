@@ -396,7 +396,13 @@ MainProgram:
    Send_Constant_String(#Msg1)
    Set_Cursor(2, 11)
    Send_Constant_String(#Msg2)
+   lcall System_is_currently_on
 forever_loop:
+
+	Set_Cursor(1, 1)
+   Send_Constant_String(#Msg1)
+   Set_Cursor(2, 11)
+   Send_Constant_String(#Msg2)
 	clr TR0 ; Stop counter 0
     mov TL0, #0x00
     mov TH0, #0x00
@@ -415,14 +421,17 @@ forever_loop:
 	mov y+2,#0x00
 	mov y+3,#0x00
 	lcall div32
+	clr mf
+	load_y(5330)
+	lcall x_gt_y
+	jb mf, forever
 	mov TL0, x+0
 	mov TH0, x+1
 	Set_Cursor(2, 5)
     lcall hex2bcd
     lcall DisplayBCD
     load_y(12)
-    ;measure Capacitance
-    lcall System_is_currently_on
+    
     ljmp label_iffy;
     jb RI, serial_get
    
@@ -640,7 +649,7 @@ Please_start_pouring:
  
  	setb TR2 ; Start playback by enabling timer 2
 	setb SPEAKER 
- 	ljmp forever_loop 
+ 	ret
 	
 percent_10:
     ; Playback a portion of the stored wav file
@@ -1219,16 +1228,16 @@ percent_full_inter:
 label_iffy:
 	Set_Cursor(1, 1)
 	Send_Constant_String(#Msg3)
-	load_y(6347)
+	load_y(5312)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_full_inter
-	jnb mf, label_eins
+	ljmp label_eins
 	
 percent_95_inter:
 	ljmp percent_95	
 label_eins:
-	load_y(6345)
+	load_y(5307)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_95_inter
@@ -1237,7 +1246,7 @@ label_eins:
 percent_90_inter:
 	ljmp percent_90	
 label_zwei:
-	load_y(6343)
+	load_y(5304)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_90_inter
@@ -1246,16 +1255,17 @@ label_zwei:
 percent_85_inter:
 	ljmp percent_85		
 label_drei:
-	load_y(6341)
+	load_y(5302)
 	clr mf
 	lcall x_gt_y
+	
 	jb mf, percent_85_inter
 	jnb mf, label_vier
 	
 percent_80_inter:
 	ljmp percent_80	
 label_vier:
-	load_y(6338)
+	load_y(5296)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_80_inter
@@ -1264,7 +1274,7 @@ label_vier:
 percent_75_inter:
 	ljmp percent_75	
 label_funf:
-	load_y(6335)
+	load_y(5284)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_75_inter
@@ -1273,7 +1283,7 @@ label_funf:
 percent_70_inter:
 	ljmp percent_70	
 label_sechs:
-	load_y(6331)
+	load_y(5281)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_70_inter
@@ -1282,16 +1292,16 @@ label_sechs:
 percent_65_inter:
 	ljmp percent_65	
 label_sieben:
-	load_y(6327)
+	load_y(5278)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_65_inter
-	jnb mf, label_sieben
+	jnb mf, label_acht
 
 percent_60_inter:
 	ljmp percent_60	
 label_acht:
-	load_y(6324)
+	load_y(5276)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_60_inter
@@ -1300,7 +1310,7 @@ label_acht:
 percent_55_inter:
 	ljmp percent_55	
 label_neun:
-	load_y(6320)
+	load_y(5274)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_55_inter
@@ -1309,7 +1319,7 @@ label_neun:
 percent_50_inter:
 	ljmp percent_50		
 label_zehn:
-	load_y(6317)
+	load_y(5271)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_50_inter
@@ -1318,7 +1328,7 @@ label_zehn:
 percent_45_inter:
 	ljmp percent_45		
 label_elf:
-	load_y(6313)
+	load_y(5269)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_45_inter
@@ -1327,7 +1337,7 @@ label_elf:
 percent_40_inter:
 	ljmp percent_40		
 label_zwolf:
-	load_y(6310)
+	load_y(5267)
 	clr mf
 	lcall x_gt_y
 	jb mf,percent_40_inter
@@ -1336,7 +1346,7 @@ label_zwolf:
 percent_35_inter:
 	ljmp percent_35		
 label_dreizehn:
-	load_y(6306)
+	load_y(5264)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_35_inter
@@ -1345,7 +1355,7 @@ label_dreizehn:
 percent_30_inter:
 	ljmp percent_30	
 label_vierzehn:
-	load_y(6302)
+	load_y(5261)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_30_inter
@@ -1354,7 +1364,7 @@ label_vierzehn:
 percent_25_inter:
 	ljmp percent_25	
 label_funfzehn:
-	load_y(6297)
+	load_y(5255)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_25_inter
@@ -1363,7 +1373,7 @@ label_funfzehn:
 percent_20_inter:
 	ljmp percent_20	
 label_sechszehn:
-	load_y(6292)
+	load_y(5250)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_20_inter
@@ -1372,7 +1382,7 @@ label_sechszehn:
 percent_15_inter:
 	ljmp percent_15		
 label_siebtzehn:
-	load_y(6285)
+	load_y(5245)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_15_inter
@@ -1381,7 +1391,7 @@ label_siebtzehn:
 percent_10_inter:
 	ljmp percent_10	
 label_achtzehn:
-	load_y(6278)
+	load_y(5236)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_10_inter
@@ -1390,23 +1400,20 @@ label_achtzehn:
 percent_5_inter:
 	ljmp percent_5
 label_neunzehn:
-	load_y(6270)
+
+	load_y(5226)
 	clr mf
 	lcall x_gt_y
 	jb mf, percent_5_inter
 	jnb mf,label_zwanzig
 	
 It_is_empty_inter:
-	ljmp percent_5	
+	ljmp It_is_empty	
 label_zwanzig:
-	load_y(6262)
+	load_y(5200)
 	clr mf
 	lcall x_gt_y
 	jb mf, It_is_empty_inter
-	
-	
-	;check mf == 1 jump to play cup is full
-	
 	ljmp forever_loop
 
 end
